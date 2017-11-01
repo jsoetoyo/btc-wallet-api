@@ -6,12 +6,7 @@ const router = express.Router();
 const users = require('../controllers/users');
 const auth = require('../controllers/auth');
 const wallets = require('../controllers/wallets');
-
-router.param('id', (req, res, next, id) => {
-    if (!id.match(/^[0-9a-fA-F]{24}$/))
-        return res.status(400).send('Invalid ID');
-    next();
-});
+const transactions = require('../controllers/transactions');
 
 router.route('/users')
     .post(users.createUser)
@@ -23,6 +18,12 @@ router.route('/auth/token')
 router.route('/wallets')
     .get(auth.validateUser, wallets.getWalletsByUserId);
 
+router.route('/wallets/:wallet_id/address')
+    .post(auth.validateUser, wallets.getAddressForWallet);
+
+router.route('/wallets/:wallet_id/transaction')
+    .post(auth.validateUser, wallets.createTransaction)
+    .get(auth.validateUser, transactions.getTransactionsByWalletId);
 
 // expose routes through router object
 module.exports = router;

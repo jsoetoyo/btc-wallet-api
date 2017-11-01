@@ -7,6 +7,9 @@ var userSchema = new Schema({
         email: {type: String, unique: true, sparse: true, trim: true},
         hash: String,
         token: String,
+        phone: String,
+        first_name: String,
+        last_name: String
     },
     {
         toObject: { getters: true },
@@ -20,6 +23,12 @@ var userSchema = new Schema({
 userSchema.pre('save', function(callback) {
     if (!this.email)
         return callback(new Error('Missing email'));
+    if (!this.phone)
+        return callback(new Error('Missing phone number'));
+    if (!this.first_name)
+        return callback(new Error('Missing first name'));
+    if (!this.last_name)
+        return callback(new Error('Missing last name'));
     if (!this.hash)
         return callback(new Error('Missing password'));
     if (this.isModified('hash'))

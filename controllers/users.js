@@ -4,6 +4,12 @@ const User = require('../models/schemas/user');
 const Wallet = require('../models/schemas/wallet');
 const config = require('../models/config');
 
+function deleteUser(user_id) {
+    User.findByIdAndRemove(user_id, (err, user) => {
+        return;
+    });
+}
+
 exports.getUserById = (req, res, next) => {
     if (req.user)
         var payload = {
@@ -17,9 +23,12 @@ exports.getUserById = (req, res, next) => {
         if (!user) return res.status(403).send('Invalid user ID');
         var payload = {
             "email": user.email,
+            "phone": user.phone,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
             "id": user.id
         };
-        res.json(payload);
+        return res.json(payload);
     });
 
 };
@@ -42,6 +51,10 @@ exports.createUser = (req, res, next) => {
     if (req.body.hash)
         userData.hash = req.body.hash;
 
+    userData.phone = req.body.phone;
+    userData.first_name = req.body.first_name;
+    userData.last_name = req.body.last_name;
+
     var user_id = undefined;
 
     // create new user
@@ -50,7 +63,7 @@ exports.createUser = (req, res, next) => {
         if (err) {
             if (err.code === 11000)
                 return res.status(400).send('Email already registered');    
-            return next(err);
+            return res.status(400).send(err.message);
         }
         user_id = user.id;
 
@@ -66,6 +79,7 @@ exports.createUser = (req, res, next) => {
         
         MyWallet.create(pswd, config.bc_code, options).then((wallet) => {
             if (!wallet.guid) {
+                deleteUser(user_id);
                 return res.status(400).send('Failed to create wallet'); 
             }
             var walletData = {
@@ -79,10 +93,14 @@ exports.createUser = (req, res, next) => {
             var newWallet = new Wallet(walletData);
             newWallet.save((err, wallet) => {
                 if (err) {
+                    deleteUser(user_id);
                     return next(err);
                 }
                 return res.sendStatus(200);
             });
+        }).catch((err) => {
+            deleteUser(user_id);
+            return res.status(400).send('Failed to create wallet');
         });
     });
 };

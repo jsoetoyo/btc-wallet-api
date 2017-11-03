@@ -1,8 +1,24 @@
 # btc-wallet-api
 Backend for btc-wallet
 
+## Running
 
-## Creating a new user:
+1. Clone the repository.
+2. Run `npm install`.
+3. If running in a dev environment, set up the mongo db.
+    3.1. Create the following directory paths in your home folder:
+    - `~/mongodb/btc-wallet-api/data/db`
+    - `~/mongodb/btc-wallet-api/logs`
+    3.2. Update the mongo conf file in `/models/mongod.conf`. The `path` and `dbpath` variables should point to paths you just created.
+4. Run `npm run bc_api` to start the blockchain.info api service.
+5. In a new terminal window run `npm run mongo` to start the mongdb database.
+    5.1 In order to later stop the mongo database run `npm run mongo-stop`.
+6. In the same window run `npm run start` to start the api.
+
+
+## Endpoints
+
+### Creating a new user:
 ```
 /users POST
 body:
@@ -15,7 +31,7 @@ returns:
     nothing 
 ```
 
-## Logging in:
+### Logging in:
 ```
 /auth/token POST
 body:
@@ -25,7 +41,7 @@ Returns
     token <string>
 ```
 
-## Getting wallets:
+### Getting wallets:
 ```
 /wallets GET
 body:
@@ -47,7 +63,7 @@ returns:
     ]
 ```
 
-## Getting a new address:
+### Getting a new address:
 ```
 /wallets/<wallet_id>/address POST
 body:
@@ -58,7 +74,7 @@ returns:
     }
 ```
 
-## Making a new transaction:
+### Making a new transaction:
 ```
 /wallet/<wallet_id>/transaction POST
 body:
@@ -77,7 +93,7 @@ returns:
     }
 ```
 
-## Getting all outgoing transaction for a wallet:
+### Getting all outgoing transaction for a wallet:
 ```
 /wallets/<wallet_id>/transaction GET
 returns:

@@ -9,7 +9,8 @@ Backend for btc-wallet
     1. Create the following directory paths in your home folder:
         - `~/mongodb/btc-wallet-api/data/db`
         - `~/mongodb/btc-wallet-api/logs`
-    2. Update the mongo conf file in `/models/mongod.conf`. The `path` and `dbpath` variables should point to paths you just created.
+    2. Copy and paste the `/models/mongod.conf` file into the `~/mongodb/btc-wallet-api/` file
+    3. Update the mongo conf file in `/models/mongod.conf`. The `path` and `dbpath` variables should point to paths you just created.
 4. Run `npm run bc_api` to start the blockchain.info api service.
 5. In a new terminal window run `npm run mongo` to start the mongdb database.
     1. In order to later stop the mongo database run `npm run mongo-stop`.

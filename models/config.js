@@ -2,6 +2,8 @@ module.exports = {
     port: 5000,
     dbUrl: '127.0.0.1:3000',
     apiHost: 'http://127.0.0.1:2750',
+    fee: 10000,
+    feePerByte: 200,
     
     // secret for creating tokens
     token_secret: process.env.TOKEN_SECRET || 'reughdjsasdkpmasipkmsdfadf',

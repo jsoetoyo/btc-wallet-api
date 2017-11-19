@@ -6,7 +6,6 @@ const router = express.Router();
 const users = require('../controllers/users');
 const auth = require('../controllers/auth');
 const wallets = require('../controllers/wallets');
-const transactions = require('../controllers/transactions');
 
 router.route('/users')
     .post(users.createUser)
@@ -23,7 +22,7 @@ router.route('/wallets/:wallet_id/address')
 
 router.route('/wallets/:wallet_id/transaction')
     .post(auth.validateUser, wallets.createTransaction)
-    .get(auth.validateUser, transactions.getTransactionsByWalletId);
+    .get(auth.validateUser, wallets.getWalletTransactions);
 
 // expose routes through router object
 module.exports = router;
